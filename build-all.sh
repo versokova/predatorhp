@@ -32,12 +32,9 @@ cd_make () {
     ( cd $1 ; ./switch-host-gcc.sh /usr/bin/gcc-5 )
 }
 
-# delete already existing build-dirs if repo exists
-if [ -d predator-repo ]
-then
-  rm -rf predator predator-bfs predator-dfs
-  rm predator-build-ok
-fi
+# delete already existing build-dirs
+rm -rf predator predator-bfs predator-dfs
+rm predator-build-ok
 
 # copy
 mkdir predator predator-dfs predator-bfs
