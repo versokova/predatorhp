@@ -4,3 +4,5 @@ predator-build-ok
 /predator-dfs/
 /predator-bfs/
 *.xml
+*.zip
+README-SVCOMP-*

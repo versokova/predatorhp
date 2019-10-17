@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 # This is the driver for predator hunting party (PredatorHP).
-# It runs 4 predators in parallel (general, BFS, DFS/limit1, DFS/limit2).
-# During run we test results of all predators each 1 second
+# It runs 3 predators in parallel (general, BFS, DFS/limit).
+# During run we test results of all predators each 0.25 second
 # and if decision is reached, we kill all other running predators.
 # There is no internal limitation of CPU time or memory.
 
@@ -18,9 +18,8 @@ import argparse
 import tempfile
 import shutil
 
-predators = None        # list of all 4 predators running in paralllel
+predators = None        # list of all 3 predators running in paralllel
 
-witness_dfs_200 = None
 witness_dfs_900 = None
 witness_bfs = None
 witness_p = None
@@ -105,14 +104,13 @@ if __name__ == "__main__":
 
   # parse commandline arguments
   parser = argparse.ArgumentParser()
-  parser.add_argument("-v","--version", action='version', version='3.14')
+  parser.add_argument("-v","--version", action='version', version='3.141')
   parser.add_argument("--propertyfile", dest="propertyfile")
   parser.add_argument("--witness", dest="witness")
   parser.add_argument("testcase")
   args = parser.parse_args()
 
   # create temporary files for witness
-  witness_dfs_200 = tempfile.mkstemp()[1]
   witness_dfs_900 = tempfile.mkstemp()[1]
   witness_bfs = tempfile.mkstemp()[1]
   witness_p = tempfile.mkstemp()[1]
@@ -120,11 +118,10 @@ if __name__ == "__main__":
   # create all Predators
   predator_accelerated = PredatorProcess(shlex.split("%s/predator/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s -m32" % (script_dir, args.propertyfile, witness_p, args.testcase)), "Accelerated", witness_p)
   predator_bfs = PredatorProcess(shlex.split("%s/predator-bfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s -m32" % (script_dir, args.propertyfile, witness_bfs, args.testcase)), "BFS", witness_bfs)
-  predator_dfs_200 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 200 -- %s -m32" % (script_dir, args.propertyfile, witness_dfs_200, args.testcase)), "DFS 200", witness_dfs_200)
   predator_dfs_900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 900 -- %s -m32" % (script_dir, args.propertyfile, witness_dfs_900, args.testcase)), "DFS 900", witness_dfs_900)
 
   # create container of Predators, predator_accelerated should be first and dfs last
-  predators = PredatorBatch([predator_accelerated, predator_bfs, predator_dfs_200, predator_dfs_900])
+  predators = PredatorBatch([predator_accelerated, predator_bfs, predator_dfs_900])
 
   # start all Predators
   predators.launch()
@@ -177,7 +174,6 @@ if __name__ == "__main__":
 
   # clean up
   os.unlink(witness_bfs)
-  os.unlink(witness_dfs_200)
   os.unlink(witness_dfs_900)
   os.unlink(witness_p)
 

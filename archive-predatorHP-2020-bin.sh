@@ -2,7 +2,7 @@
 
 #echo Runs only on Ubuntu 18.04 !
 
-BASE=PredatorHP-2019
+BASE=PredatorHP-2020
 DATE=`date -I`
 
 SYSTEM=$(grep "^NAME=" /etc/os-release|sed 's/^NAME="\(.*\)"/\1/')
@@ -20,20 +20,21 @@ if [ "$VERSION" != "18.04" ]; then
   exit
 fi
 
-if [ `pwd` != $HOME ]; then
-  echo "Usage: cd; $0"
-  exit
-fi
+DIR=`pwd`
+(
+cd $HOME
 
-cp $BASE/README.md $BASE/README-SVCOMP-2019
+cp $BASE/README.md $BASE/README-SVCOMP-2020
 
-zip -qr PredatorHP-2019-bin-${DATE}.zip $BASE -i \
+zip -qr "$DIR"/PredatorHP-2020-bin-${DATE}.zip $BASE -i \
   $BASE/LICENSE \
   $BASE/predatorHP.py  \
-  $BASE/README-SVCOMP-2019  \
+  $BASE/README-SVCOMP-2020  \
   $BASE/predator/sl_build/check-property.sh  \
   $BASE/predator/sl_build/libsl.so  \
   $BASE/predator-dfs/sl_build/check-property.sh  \
   $BASE/predator-dfs/sl_build/libsl.so  \
   $BASE/predator-bfs/sl_build/check-property.sh  \
   $BASE/predator-bfs/sl_build/libsl.so
+  
+)

@@ -1,5 +1,5 @@
 
-Instructions for SV-COMP 2019
+Instructions for SV-COMP 2020
 =============================
 
 0. Install the dependencies (please note: we use old GCC 5):
@@ -10,7 +10,7 @@ Instructions for SV-COMP 2019
    for your system -- Predator checks this and predatorHP.py script
    produces "UNKNOWN" in the case of version mismatch. This is very important when
    Ubuntu has not installed required dependencies.)
-   In the `predatorHP-2019/` directory, run the following script:
+   In the `PredatorHP-2020/` directory, run the following script:
 
         $ ./build-all.sh
 
