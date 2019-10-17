@@ -1,0 +1,6 @@
+.DS_Store
+predator-build-ok
+/predator/
+/predator-dfs/
+/predator-bfs/
+*.xml
