@@ -20,7 +20,7 @@ cloneAndMerge() {
     git config user.email "robot@fit.vutbr.cz"
     git config user.name "Script"
 
-    git remote add origin ../predator-repo/
+    git remote add origin https://pajda.fit.vutbr.cz/isokova/predator-sv-comp.git
     git fetch
     git checkout $BASEBRANCH
     git merge -m "automatic merge commit" origin/$BRANCH
@@ -45,8 +45,6 @@ cloneAndMerge predator     base-org
 cloneAndMerge predator-dfs base-dfs
 cloneAndMerge predator-bfs base-bfs
 
-# TODO: add to repo only for predator
-cp check-property.sh.in predator/sl/check-property.sh.in
 # make all versions of predators
 cd_make predator && cd_make predator-bfs && cd_make predator-dfs
 if [ $? != 0 ]; then
