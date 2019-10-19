@@ -1,16 +1,14 @@
 #!/bin/bash
 
 # This script makes three versions of predator in three different directories
-# configured for old GCC version 5 in /usr/bin/gcc-5
-# needs git, cmake, GCC, gcc-5-plugin-dev, etc. --  see README*
-## FIXME Warning: does not work yet for newer GCC
+# needs git, cmake, GCC, gcc-7-plugin-dev, etc. --  see README*
 
 # git repository ceckout
 cloneAndMerge() {
     #basebranch possibilites: master statistics michalk
     #statistics writes depth info
     #michalk is experimental branch
-    BASEBRANCH=master
+    BASEBRANCH=svcomp
     DIR=$1
     BRANCH=$2
     (
@@ -20,7 +18,7 @@ cloneAndMerge() {
     git config user.email "robot@fit.vutbr.cz"
     git config user.name "Script"
 
-    git remote add origin https://pajda.fit.vutbr.cz/isokova/predator-sv-comp.git
+    git remote add origin https://github.com/versokova/predator.git
     git fetch
     git checkout $BASEBRANCH
     git merge -m "automatic merge commit" origin/$BRANCH
@@ -29,7 +27,7 @@ cloneAndMerge() {
 
 # predator build
 cd_make () {
-    ( cd $1 ; ./switch-host-gcc.sh /usr/bin/gcc-5 )
+    ( cd $1 ; ./switch-host-gcc.sh /usr/bin/gcc )
 }
 
 # delete already existing build-dirs
@@ -38,9 +36,9 @@ rm predator-build-ok
 
 # copy
 mkdir predator predator-dfs predator-bfs
-cloneAndMerge predator     base-org
-cloneAndMerge predator-dfs base-dfs
-cloneAndMerge predator-bfs base-bfs
+cloneAndMerge predator     svcomp-orig
+cloneAndMerge predator-dfs svcomp-dfs
+cloneAndMerge predator-bfs svcomp-bfs
 
 # make all versions of predators
 cd_make predator && cd_make predator-bfs && cd_make predator-dfs
