@@ -3,6 +3,9 @@
 # This script makes three versions of predator in three different directories
 # needs git, cmake, GCC, gcc-7-plugin-dev, etc. --  see README*
 
+# number of processor units
+NCPU="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
+
 # git repository ceckout
 cloneAndMerge() {
     #basebranch possibilites: master statistics michalk
@@ -27,7 +30,7 @@ cloneAndMerge() {
 
 # predator build
 cd_make () {
-    ( cd $1 ; ./switch-host-gcc.sh /usr/bin/gcc )
+    ( cd $1 ; export GCC_HOST=/usr/bin/gcc ; make -j${NCPU} )
 }
 
 # delete already existing build-dirs
