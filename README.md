@@ -2,9 +2,9 @@
 Instructions for SV-COMP 2020
 =============================
 
-0. Install the dependencies (please note: we use old GCC 5):
+0. Install the dependencies:
 
-        # apt-get install cmake git g++-5-multilib gcc-5-plugin-dev libboost-dev make python
+        # apt-get install cmake git g++-7-multilib gcc-7-plugin-dev libboost-dev make python expect
 
 1. Build PredatorHP from sources. (Skip this step if you have binary version compiled
    for your system -- Predator checks this and predatorHP.py script
