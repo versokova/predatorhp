@@ -6,11 +6,8 @@
 # number of processor units
 NCPU="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
 
-# git repository ceckout
+# git repository checkout
 cloneAndMerge() {
-    #basebranch possibilites: master statistics michalk
-    #statistics writes depth info
-    #michalk is experimental branch
     BASEBRANCH=svcomp
     DIR=$1
     BRANCH=$2
@@ -22,7 +19,7 @@ cloneAndMerge() {
     git config user.name "Script"
 
     git remote add origin https://github.com/versokova/predator.git
-    git fetch
+    git fetch --depth 5
     git checkout $BASEBRANCH
     git merge -m "automatic merge commit" origin/$BRANCH
     )
