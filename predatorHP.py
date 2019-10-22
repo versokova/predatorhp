@@ -107,6 +107,7 @@ if __name__ == "__main__":
   parser.add_argument("-v","--version", action='version', version='3.141')
   parser.add_argument("--propertyfile", dest="propertyfile")
   parser.add_argument("--witness", dest="witness")
+  parser.add_argument("--compiler-options", metavar="CFLAGS", default="-m32") # --compiler-options="-m32 -g"
   parser.add_argument("testcase")
   args = parser.parse_args()
 
@@ -116,9 +117,9 @@ if __name__ == "__main__":
   witness_p = tempfile.mkstemp()[1]
 
   # create all Predators
-  predator_accelerated = PredatorProcess(shlex.split("%s/predator/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s -m32" % (script_dir, args.propertyfile, witness_p, args.testcase)), "Accelerated", witness_p)
-  predator_bfs = PredatorProcess(shlex.split("%s/predator-bfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s -m32" % (script_dir, args.propertyfile, witness_bfs, args.testcase)), "BFS", witness_bfs)
-  predator_dfs_900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 900 -- %s -m32" % (script_dir, args.propertyfile, witness_dfs_900, args.testcase)), "DFS 900", witness_dfs_900)
+  predator_accelerated = PredatorProcess(shlex.split("%s/predator/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s %s" % (script_dir, args.propertyfile, witness_p, args.testcase, args.compiler_options)), "Accelerated", witness_p)
+  predator_bfs = PredatorProcess(shlex.split("%s/predator-bfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s %s" % (script_dir, args.propertyfile, witness_bfs, args.testcase, args.compiler_options)), "BFS", witness_bfs)
+  predator_dfs_900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_900, args.testcase, args.compiler_options)), "DFS 900", witness_dfs_900)
 
   # create container of Predators, predator_accelerated should be first and dfs last
   predators = PredatorBatch([predator_accelerated, predator_bfs, predator_dfs_900])

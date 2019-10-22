@@ -27,10 +27,11 @@ Instructions for SV-COMP 2020
 ### Usage
    You can use the `predatorHP.py` script to verify each single test-case.
 
-    $ predatorHP.py --propertyfile PROPERTYFILE --witness WITNESS TASK
+    $ predatorHP.py --propertyfile PROPERTYFILE --witness WITNESS [--compiler-options CFLAGS] TASK
 
     PROPERTYFILE: Path to a file containing the property to be verified
                   (in SV-COMP LTL specification)
     WITNESS:      Path to a file, where the witness trace in XML will be written
+    CFLAGS:       Compiler options (e.g. --compiler-options="-m32 -g")
     TASK:         Path to a C program to be verified
     
