@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # This is the driver for predator hunting party (PredatorHP).
-# It runs 3 predators in parallel (general, BFS, DFS/limit).
+# It runs 4 predators in parallel (general, BFS, DFS/limit1, DFS/limit2).
 # During run we test results of all predators each 0.25 second
 # and if decision is reached, we kill all other running predators.
 # There is no internal limitation of CPU time or memory.
@@ -18,9 +18,10 @@ import argparse
 import tempfile
 import shutil
 
-predators = None        # list of all 3 predators running in paralllel
+predators = None        # list of all 4 predators running in paralllel
 
 witness_dfs_900 = None
+witness_dfs_1900 = None
 witness_bfs = None
 witness_p = None
 
@@ -113,6 +114,7 @@ if __name__ == "__main__":
 
   # create temporary files for witness
   witness_dfs_900 = tempfile.mkstemp()[1]
+  witness_dfs_1900 = tempfile.mkstemp()[1]
   witness_bfs = tempfile.mkstemp()[1]
   witness_p = tempfile.mkstemp()[1]
 
@@ -120,9 +122,10 @@ if __name__ == "__main__":
   predator_accelerated = PredatorProcess(shlex.split("%s/predator/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s %s" % (script_dir, args.propertyfile, witness_p, args.testcase, args.compiler_options)), "Accelerated", witness_p)
   predator_bfs = PredatorProcess(shlex.split("%s/predator-bfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s %s" % (script_dir, args.propertyfile, witness_bfs, args.testcase, args.compiler_options)), "BFS", witness_bfs)
   predator_dfs_900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_900, args.testcase, args.compiler_options)), "DFS 900", witness_dfs_900)
+  predator_dfs_1900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 1900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_1900, args.testcase, args.compiler_options)), "DFS 1900", witness_dfs_1900)
 
   # create container of Predators, predator_accelerated should be first and dfs last
-  predators = PredatorBatch([predator_accelerated, predator_bfs, predator_dfs_900])
+  predators = PredatorBatch([predator_accelerated, predator_bfs, predator_dfs_900, predator_dfs_1900])
 
   # start all Predators
   predators.launch()
@@ -176,6 +179,7 @@ if __name__ == "__main__":
   # clean up
   os.unlink(witness_bfs)
   os.unlink(witness_dfs_900)
+  os.unlink(witness_dfs_1900)
   os.unlink(witness_p)
 
   # end main()
