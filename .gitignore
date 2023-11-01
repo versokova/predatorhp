@@ -6,3 +6,4 @@ predator-build-ok
 *.xml
 *.zip
 README-SVCOMP-*
+_test
