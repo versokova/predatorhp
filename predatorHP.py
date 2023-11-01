@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 # This is the driver for predator hunting party (PredatorHP).
 # It runs 4 predators in parallel (general, BFS, DFS/limit1, DFS/limit2).
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
   # parse commandline arguments
   parser = argparse.ArgumentParser()
-  parser.add_argument("-v","--version", action='version', version='3.141')
+  parser.add_argument("-v","--version", action='version', version='3.1415')
   parser.add_argument("--propertyfile", dest="propertyfile")
   parser.add_argument("--witness", dest="witness")
   parser.add_argument("--compiler-options", metavar="CFLAGS", default="-m32") # --compiler-options="-m32 -g"

@@ -1,16 +1,16 @@
 
-Instructions for SV-COMP 2020
+Instructions for SV-COMP 2024
 =============================
 
 0. Install the dependencies:
 
-        # apt-get install cmake git g++-7-multilib gcc-7-plugin-dev libboost-dev make python
+        # apt-get install cmake git g++-11-multilib gcc-11-plugin-dev libboost-dev make python3
 
 1. Build PredatorHP from sources. (Skip this step if you have binary version compiled
    for your system -- Predator checks this and predatorHP.py script
    produces "UNKNOWN" in the case of version mismatch. This is very important when
    Ubuntu has not installed required dependencies.)
-   In the `PredatorHP-2020/` directory, run the following script:
+   In the `PredatorHP-2024/` directory, run the following script:
 
         $ ./build-all.sh
 
