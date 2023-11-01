@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2.7
 
 # This is the driver for predator hunting party (PredatorHP).
 # It runs 4 predators in parallel (general, BFS, DFS/limit1, DFS/limit2).

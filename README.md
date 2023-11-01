@@ -4,7 +4,7 @@ Instructions for SV-COMP 2024
 
 0. Install the dependencies:
 
-        # apt-get install cmake git g++-11-multilib gcc-11-plugin-dev libboost-dev make python3
+        # apt-get install cmake git g++-11-multilib gcc-11-plugin-dev libboost-dev make python2.7
 
 1. Build PredatorHP from sources. (Skip this step if you have binary version compiled
    for your system -- Predator checks this and predatorHP.py script
