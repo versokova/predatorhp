@@ -1,14 +1,27 @@
 #!/bin/bash
 
 # This script makes three versions of predator in three different directories
-# needs git, cmake, GCC, gcc-7-plugin-dev, etc. --  see README*
+# for dependencies, see README*
 
 # Arguments:
 # --src       Only download predators
 # --build     Only install predators
 
+# export GCC_HOST="/usr/local/Cellar/gcc@9/9.3.0_1/bin/gcc-9"
+
 SRC=true
 BUILD=true
+
+if [ `uname` = Darwin ]; then
+    OPSYS='macOS'
+else
+    OPSYS='Linux'
+fi
+
+die() {
+    printf "%s: %s\n" "$SELF" "$*" >&2
+    exit 1
+}
 
 # arguments
 if [ $# -eq 1 ]; then
@@ -19,10 +32,6 @@ if [ $# -eq 1 ]; then
     else die "invalid argument"
     fi
 fi
-
-
-# number of processor units
-NCPU="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
 
 # git repository checkout
 cloneAndMerge() {
@@ -44,9 +53,24 @@ cloneAndMerge() {
     )
 }
 
+
 # predator build
-cd_make () {
-    ( cd $1 ; export GCC_HOST=/usr/bin/gcc ; make -j${NCPU} )
+cd_make() {
+    (
+        CHANGE=false
+        if [ `uname` = Darwin ] && [ -z "$CXX" ]; then
+            # no CXX compiler on macos, try substitue gcc for g++
+            base_gcc="${GCC_HOST##*/}"
+            gxx="${GCC_HOST%/*}/${base_gcc/gcc/g++}"
+            if [ "$GCC_HOST" != "$gxx" ] && [ -x "$gxx" ]; then
+                export CC="$GCC_HOST"
+                export CXX="$gxx"
+                CHANGE=true
+            fi
+        fi
+        cd $1
+        $MAKE
+    )
 }
 
 rm -f predator-build-ok
@@ -63,13 +87,38 @@ if "$SRC" ; then
 fi
 
 if "$BUILD" ; then
+    # number of processor units
+    NCPU="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
+    MAKE="make -j${NCPU}"
+
+    export GCC_HOST="${GCC_HOST:-/usr/bin/gcc}"
+    if test "/" != "${GCC_HOST:0:1}"; then
+        if echo "$GCC_HOST" | grep / >/dev/null; then
+            # assume a relative path to GCC_HOST
+            GCC_HOST="$(realpath "$GCC_HOST")"
+        else
+            # assume an executable in $PATH
+            GCC_HOST="$(command -v "$GCC_HOST")"
+        fi
+    fi
+
+    # check GCC_HOST
+    test -x "$GCC_HOST" || die "GCC_HOST is not an executable file: $GCC_HOST"
+
+    # try to run GCC_HOST
+    "$GCC_HOST" --version || die "unable to run gcc: $GCC_HOST --version"
+
     # make all versions of predators
     cd_make predator && cd_make predator-bfs && cd_make predator-dfs
     if [ $? != 0 ]; then
-        echo "Instalation failed!"
-        exit 1 
+        die "Instalation failed!"
     fi
     # mark successful completion
     echo "Installation completed."
     date >predator-build-ok
+fi
+
+if $CHANGE; then
+    export CC=""
+    export CXX=""
 fi

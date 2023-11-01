@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#echo Runs only on Ubuntu 18.04 !
+#echo Runs only on Ubuntu 22.04 !
 
-BASE=PredatorHP-2020
+BASE=PredatorHP-2024
 DATE=`date -I`
 
 SYSTEM=$(grep "^NAME=" /etc/os-release|sed 's/^NAME="\(.*\)"/\1/')
@@ -15,8 +15,8 @@ if [ "$SYSTEM" != "Ubuntu" ]; then
   exit
 fi
 
-if [ "$VERSION" != "18.04" ]; then
-  echo "Run on Ubuntu 18.04, please"
+if [ "$VERSION" != "22.04" ]; then
+  echo "Run on Ubuntu 22.04, please"
   exit
 fi
 
@@ -24,12 +24,12 @@ DIR=`pwd`
 (
 cd $HOME
 
-cp $BASE/README.md $BASE/README-SVCOMP-2020
+cp $BASE/README.md $BASE/README-SVCOMP-2024
 
-zip -qr "$DIR"/PredatorHP-2020-bin-${DATE}.zip $BASE -i \
+zip -qr "$DIR"/PredatorHP-2024-bin-${DATE}.zip $BASE -i \
   $BASE/LICENSE \
   $BASE/predatorHP.py  \
-  $BASE/README-SVCOMP-2020  \
+  $BASE/README-SVCOMP-2024  \
   $BASE/predator/sl_build/check-property.sh  \
   $BASE/predator/sl_build/libsl.so  \
   $BASE/predator-dfs/sl_build/check-property.sh  \

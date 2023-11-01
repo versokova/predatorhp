@@ -6,7 +6,7 @@ BASE="${DIR##*/}"
 (
 cd ..
 
-zip -qr "$DIR"/PredatorHP-2020-src-${DATE}.zip $BASE -x \
+zip -qr "$DIR"/PredatorHP-2024-src-${DATE}.zip $BASE -x \
   $BASE/.gitignore \
   $BASE/.git/\* \
   $BASE/predator/.gitignore \
