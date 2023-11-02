@@ -106,9 +106,9 @@ if __name__ == "__main__":
   # parse commandline arguments
   parser = argparse.ArgumentParser()
   parser.add_argument("-v","--version", action='version', version='3.1415')
-  parser.add_argument("--propertyfile", dest="propertyfile")
-  parser.add_argument("--witness", dest="witness")
-  parser.add_argument("--compiler-options", metavar="CFLAGS", default="-m32") # --compiler-options="-m32 -g"
+  parser.add_argument("-p","--propertyfile", dest="propertyfile")
+  parser.add_argument("-w","--witness", dest="witness")
+  parser.add_argument("-c","--compiler-options", metavar="CFLAGS", default="-m32") # --compiler-options="-m32 -g"
   parser.add_argument("testcase")
   args = parser.parse_args()
 
@@ -119,10 +119,10 @@ if __name__ == "__main__":
   witness_p = tempfile.mkstemp()[1]
 
   # create all Predators
-  predator_accelerated = PredatorProcess(shlex.split("%s/predator/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s %s" % (script_dir, args.propertyfile, witness_p, args.testcase, args.compiler_options)), "Accelerated", witness_p)
-  predator_bfs = PredatorProcess(shlex.split("%s/predator-bfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s -- %s %s" % (script_dir, args.propertyfile, witness_bfs, args.testcase, args.compiler_options)), "BFS", witness_bfs)
-  predator_dfs_900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_900, args.testcase, args.compiler_options)), "DFS 900", witness_dfs_900)
-  predator_dfs_1900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh --trace=/dev/null --propertyfile %s --xmltrace %s --depth 1900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_1900, args.testcase, args.compiler_options)), "DFS 1900", witness_dfs_1900)
+  predator_accelerated = PredatorProcess(shlex.split("%s/predator/sl_build/check-property.sh -t /dev/null -p %s -x %s -- %s %s" % (script_dir, args.propertyfile, witness_p, args.testcase, args.compiler_options)), "Accelerated", witness_p)
+  predator_bfs = PredatorProcess(shlex.split("%s/predator-bfs/sl_build/check-property.sh -t /dev/null -p %s -x %s -- %s %s" % (script_dir, args.propertyfile, witness_bfs, args.testcase, args.compiler_options)), "BFS", witness_bfs)
+  predator_dfs_900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh -t /dev/null -p %s -x %s -d 900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_900, args.testcase, args.compiler_options)), "DFS 900", witness_dfs_900)
+  predator_dfs_1900 = PredatorProcess(shlex.split("%s/predator-dfs/sl_build/check-property.sh -t /dev/null -p %s -x %s -d 1900 -- %s %s" % (script_dir, args.propertyfile, witness_dfs_1900, args.testcase, args.compiler_options)), "DFS 1900", witness_dfs_1900)
 
   # create container of Predators, predator_accelerated should be first and dfs last
   predators = PredatorBatch([predator_accelerated, predator_bfs, predator_dfs_900, predator_dfs_1900])

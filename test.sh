@@ -25,7 +25,6 @@ run_predatorhp() {
 
 status_update "Running PredatroHP"
 [ -e "$OUT_DIR" ] || mkdir $OUT_DIR
-echo "Running $src..."
 run_predatorhp test01-valid-memsafety.c valid-memsafety
 run_predatorhp test02-err-valid-deref.c valid-memsafety
 run_predatorhp test03-err-valid-free.c valid-memsafety
